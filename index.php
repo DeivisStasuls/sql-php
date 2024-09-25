@@ -5,14 +5,20 @@
 $host = "localhost";
 $user = "php_app";
 $password = "1234";
-$database = "sql_store";
+$database = "sql_hr";
 $conn = new mysqli($host,$user,$password,$database);
 if ($conn->connect_error){
     die("connection failed".$conn->connect_error);
 };
 echo "connection succesfull";
 
-$sql = "SELECT customer_id, first_name, last_name FROM customers";
+$sql = "select 
+    e.first_name,
+    e.last_name,
+    m.first_name as 'manager_name'
+from employees e
+join employees m
+	on e.reports_to = m.employee_id;";
 $result = $conn->query($sql);
 ?>
 
@@ -33,10 +39,12 @@ $result = $conn->query($sql);
         while($row = $result->fetch_assoc()){
             //print_r($row);
             //izvadit katru elementu ar li elementu
-            echo "<li>Customer ID=" . $row["customer_id"]." ". $row["first_name"]." ". $row["last_name"] . "</li>";
+            echo "<li>employee=" . $row["first_name"]." ".$row["last_name"]." ". $row["manager_name"]." ". "</li>";
 
+          
         }
         echo"</ul>";
+        
 
     }
     else{
